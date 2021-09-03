@@ -1,0 +1,116 @@
+{% extends "_base.html"%}
+{% set body_class = 'register-page' %}
+
+{% block title %}
+    Cadastrar
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <!-- icheck bootstrap -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck-bootstrap/3.0.1/icheck-bootstrap.min.css">
+
+{% endblock %}
+
+{% block content %}
+<div class="register-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="{{ url_for('index') }}" class="h1"><b>Boot</b>shop</a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">Criar seu cadastro</p>
+      <p class="login-box-msg"><span style="color: red">*</span>Campos obrigatórios</p>
+
+      <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="input-group mb-3">
+          {{ form.username(class="form-control", placeholder="Nome Completo") }}
+          <!-- <input type="text" class="form-control" placeholder="Nome completo"> -->
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="input-group mb-3">
+          {{ form.email(class="form-control", placeholder="E-mail") }}
+          <!-- <input type="email" class="form-control" placeholder="Email"> -->
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="input-group mb-3">
+          {{ form.password(class="form-control", placeholder="Senha") }}
+          <!-- <input type="password" class="form-control" placeholder="Senha"> -->
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="input-group mb-3">
+          {{ form.password2(class="form-control", placeholder="Repetir senha") }}
+          <!-- <input type="password" class="form-control" placeholder="Repetir senha"> -->
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          {% for error in form.password2.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+          {% endfor %}
+        </div>
+        <div class="input-group mb-3">
+          <p>Ao criar seu cadastro, você concorda com  a nossa <b>Política de Privacidade</b></p>
+        </div>
+        <div class="row">
+          <!-- /.col -->
+          <div class="col-12">
+            {{ form.submit(class="btn btn-primary btn-block") }}
+            <!-- <button type="submit" class="btn btn-primary btn-block">Criar Cadastro</button> -->
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+      <hr>
+      Ou use uma rede social
+      <hr>
+      <div class="social-auth-links text-center">
+        <a href="#" class="btn btn-block btn-primary">
+          <i class="fab fa-facebook mr-2"></i>
+          Criar com Facebook
+        </a>
+        <a href="#" class="btn btn-block btn-danger">
+          <i class="fab fa-google-plus mr-2"></i>
+          Criar com Google+
+        </a>
+      </div>
+
+      <a href="{{ url_for('login') }}" class="text-center">Já tem cadastro? Entrar</a>
+    </div>
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+{% endblock %}
