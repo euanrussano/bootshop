@@ -44,7 +44,7 @@ def dashboard():
                 'new':  len(current_month_clients.all()),
                 'perc_month': perc_month_inc_clients,
                 'max': 'Not Implemented' }
-
+    '''
     order_stats = {'total': dummy_data.get_orders_total(),
              'perc_month':dummy_data.get_orders_perc_month()}
 
@@ -52,7 +52,7 @@ def dashboard():
 
     product_stats = {'total':len( dummy_data.Product.query.all() ),
                      'perc_month' : dummy_data.get_products_perc_month()}
-
+    '''
 
 
     
@@ -60,10 +60,11 @@ def dashboard():
                                                          messages=messages,
                                                          notifications=notifications,
                                                          client_stats = client_stats,
-                                                         order_stats = order_stats,
-                                                         best_selling_products = best_selling_products,
-                                                         product_stats = product_stats,
-                                                         request = request)
+                                                         #order_stats = order_stats,
+                                                         #best_selling_products = best_selling_products,
+                                                         #product_stats = product_stats,
+                                                         request = request
+                                                         )
 
 @app.route('/entrar', methods=['GET', 'POST'])
 def login():

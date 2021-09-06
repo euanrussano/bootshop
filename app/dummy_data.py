@@ -4,66 +4,97 @@ from datetime import date
 from random import randint
 
 from app import db
-# ------------------- Users ---------------------------
+# ------------------- User ---------------------------
 
-from app.models import Category, Product, ProductReview, ProductStock, User
+from app.models import User
 
 emails = ['john@example.com', 'mary@example.com', 'carl@example.com', 'kevin@example.com', 'lisa@example.com']
 
 
+User.query.delete()
 for email in emails:
-    if not User.query.filter_by(email=email).all():
-        u = User(email=email,
-                is_staff=False)
 
-        if email == "john@example.com":
-            u.is_staff = True
+    u = User(email=email,
+            is_staff=False)
 
-        u.username_from_email()
-        u.set_password_hash("testing")
-        
-        db.session.add(u)
+    if email == "john@example.com":
+        u.is_staff = True
+
+    u.username_from_email()
+    u.set_password_hash("testing")
+    
+    db.session.add(u)
+
+db.session.commit()
+
+# ------------------- Address ---------------------------
+from app.models import Address
+
+addresses = [
+    Address(
+        address = 'Rua A',
+        postal_code = 23894000,
+        city = 'Cidade A',
+        state = 'RJ',
+        user_id = User.query.get(1).id
+    ),
+    Address(
+        address = 'Rua B',
+        postal_code = 23895000,
+        city = 'Cidade A',
+        state = 'RJ',
+        user_id = User.query.get(1).id
+    ),
+    Address(
+        address = 'Rua C',
+        postal_code = 23897000,
+        city = 'Cidade D',
+        state = 'RJ',
+        user_id = User.query.get(2).id
+    ),
+]
+
+Address.query.delete()
+for address in addresses:
+    db.session.add(address)
 
 db.session.commit()
 
 # ------------------- Category ---------------------------
-
+from app.models import Category
 category_names = ['Categoria A', 'Categoria B', 'Categoria C']
 
+Category.query.delete()
 for category_name in category_names:
-    if not Category.query.filter_by(name=category_name).all():
-        cat = Category(name="Categoria A")
+    cat = Category(name="Categoria A")
 
-        db.session.add(cat)
+    db.session.add(cat)
+
+db.session.commit()
 
 # ------------------- Products ---------------------------
+from app.models import Product
 
 products =[
     Product(
     name = 'Produto 1',
-    price = 12.99,
     description = 'A simple product ',
-    available = True,
     category_id = 1),
     
     Product(
     name = 'Produto 2',
-    price = 2.30,
     description = 'Another simple product ',
-    available = True,
     category_id = 1),
 
     Product(
     name = 'Produto 3',
-    price = 8.25,
     description = 'Even another simple product ',
-    available = True,
     category_id = 2)
 ]
 
+Product.query.delete()
 for product in products:
-    if not Product.query.filter_by(name=product.name).all():
-        db.session.add(product)
+    db.session.add(product)
 
 db.session.commit()
 
@@ -71,91 +102,122 @@ db.session.commit()
 def get_products_perc_month():
     return 11
 
+# ------------------- Review ---------------------------
+from app.models import ProductReview
+
+product_reviews = [
+    ProductReview(
+        description = 'Excellent product',
+        product_id = Product.query.get(1).id,
+        user_id = User.query.get(1).id,
+        rating = 5
+    ),
+    ProductReview(
+        description = 'Worst product ever',
+        product_id = Product.query.get(2).id,
+        user_id = User.query.get(2).id,
+        rating = 1
+    ),
+    ProductReview(
+        description = 'Average but ok, no problem.',
+        product_id = Product.query.get(2).id,
+        user_id = User.query.get(3).id,
+        rating = 3
+    ),
+    ProductReview(
+        description = 'Good product',
+        product_id = Product.query.get(3).id,
+        user_id = User.query.get(3).id,
+        rating = 4
+    ),
+]
+
+ProductReview.query.delete()
+for review in product_reviews:
+    db.session.add(review)
+
+db.session.commit()
+
 # ------------------- Product Stock ---------------------------
+from app.models import ProductStock
 
 product_stocks = [
     ProductStock(
     product_id = Product.query.get(1).id,
-    user_id = User.query.get(1).id,
     quantity = 10,
     quantity_sold = 0),
 
     ProductStock(
     product_id = Product.query.get(1).id,
-    user_id = User.query.get(2).id,
     quantity = 13,
     quantity_sold = 3)
 ]
 
+ProductStock.query.delete()
 for product_stock in product_stocks:
-    if not ProductStock.query.filter_by(quantity=product_stock.quantity).all():
-        db.session.add(product_stock)
+    db.session.add(product_stock)
 
 db.session.commit()
 
+# ------------------- Wishlist ---------------------------
 
-# ------------------- Messages ---------------------------
-Message = [
-            {'user': User.query.get(1),
-             'text':'test message 1'},
-            {'user': User.query.get(1),
-             'text':'test message 2'},
-                         ]
+from app.models import Wishlist, products_wishlist
 
-# ------------------- Notifications ---------------------------
-Notification = [
-        {'text': '8 emails'},
-        {'text': '4 new contacts'},
-    ]
-
-# ------------------- Review ---------------------------
-
-product_reviews = [
-    ProductReview(
-        description = 'Excellent product',
-        product_id = Product.query.get(1),
-        user_id = User.query.get(1),
-        rating = 5
-    ),
-    ProductReview(
-        description = 'Worst product ever',
-        product_id = Product.query.get(2),
-        user_id = User.query.get(2),
-        rating = 1
-    ),
-    ProductReview(
-        description = 'Average but ok, no problem.',
-        product_id = Product.query.get(2),
-        user_id = User.query.get(3),
-        rating = 3
-    ),
-    ProductReview(
-        description = 'Good product',
-        product_id = Product.query.get(3),
-        user_id = User.query.get(3),
-        rating = 4
-    ),
+wishlists = [
+    Wishlist(
+        user_id = User.query.get(1).id
+    )
 ]
 
-for review in product_reviews:
-    if not ProductReview.query.filter_by(description=review.description).all():
-        db.session.add(review)
+Wishlist.query.delete()
+for wishlist in wishlists:
+    db.session.add(wishlist)
 
 db.session.commit()
+
+#products_wishlist.delete()
+#ins = products_wishlist.insert().values(product_id=1, wishlist_id=1)
+#db.engine.execute(ins)
 
 # ------------------- Orders ---------------------------
 
+from app.models import OrderItem, Order
 
-Order = [
-    {
-        'user': User.query.get(1),
-        'products':[Product.query.get(1)],
-    },
-    {
-        'user': User.query.get(1),
-        'products':[Product.query.get(1), Product.query.get(2)],
-    }
+orders = [
+    Order(
+        user_id = User.query.get(1).id
+    )
 ]
+
+Order.query.delete()
+for order in orders:
+    db.session.add(order)
+
+db.session.commit()
+
+order_items = [
+    OrderItem(
+        productstock_id = ProductStock.query.get(1).id,
+        quantity = 2,
+        price = ProductStock.query.get(1).price,
+        order_id = Order.query.get(1).id
+    ),
+    OrderItem(
+        productstock_id = ProductStock.query.get(2).id,
+        quantity = 1,
+        price = ProductStock.query.get(2).price,
+        order_id = Order.query.get(1).id
+    ),
+
+]
+
+OrderItem.query.delete()
+for i, order_item in enumerate(order_items):
+    db.session.add(order_item)
+
+db.session.commit()
+
+
 
 def get_total_cost(order):
     return sum( list(map( lambda product: product.price, order['products'])) )
@@ -186,3 +248,17 @@ def get_best_selling_products():
 
 
 
+
+# ------------------- Messages ---------------------------
+Message = [
+            {'user': User.query.get(1),
+             'text':'test message 1'},
+            {'user': User.query.get(1),
+             'text':'test message 2'},
+                         ]
+
+# ------------------- Notifications ---------------------------
+Notification = [
+        {'text': '8 emails'},
+        {'text': '4 new contacts'},
+    ]
