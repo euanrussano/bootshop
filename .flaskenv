@@ -1,1 +1,2 @@
 FLASK_APP=bootshop.py
+FLASK_ENV=development

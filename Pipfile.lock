@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e9a684e961a84cddb0275cd06f64727158bac8f73cb336233e634fef724895ed"
+            "sha256": "59e9abca592bbdf8c29837c550cfa9b6efaf7d23ef44d02b471a9491130f3d85"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -302,6 +302,14 @@
                 "sha256:81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c"
             ],
             "version": "==2.3.3"
+        },
+        "wtforms-sqlalchemy": {
+            "hashes": [
+                "sha256:2ef019cb9bf1e544911b3e08aff963b67fb9409db9d2029eb71c73d1af1f8f16",
+                "sha256:5160250c04782e26a7485a3913b8d52c2548b609ee3117f3e32aee2c20c919ba"
+            ],
+            "index": "pypi",
+            "version": "==0.2"
         },
         "zipp": {
             "hashes": [

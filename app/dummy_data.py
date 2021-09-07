@@ -6,7 +6,7 @@ from random import randint
 from app import db
 # ------------------- User ---------------------------
 
-from app.models import User
+from app.auth.models import User
 
 emails = ['john@example.com', 'mary@example.com', 'carl@example.com', 'kevin@example.com', 'lisa@example.com']
 
@@ -28,7 +28,7 @@ for email in emails:
 db.session.commit()
 
 # ------------------- Address ---------------------------
-from app.models import Address
+from app.auth.models import Address
 
 addresses = [
     Address(
@@ -66,7 +66,7 @@ category_names = ['Categoria A', 'Categoria B', 'Categoria C']
 
 Category.query.delete()
 for category_name in category_names:
-    cat = Category(name="Categoria A")
+    cat = Category(name=category_name)
 
     db.session.add(cat)
 

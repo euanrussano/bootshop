@@ -1,15 +1,15 @@
 from flask import render_template, request, redirect, url_for
-from flask.helpers import flash
-from flask_migrate import current
-from flask_login import current_user, login_user, logout_user, login_required
-
-from app import app, db
-from app.forms import LoginForm, RegistrationForm
-from app.models import User, Product, Category
-from . import dummy_data
+from flask_login import current_user
 
 from werkzeug.urls import url_parse
 from datetime import datetime, timedelta
+
+from app import app, db
+from app.forms import ProductForm
+from app.models import Product, Category
+from app import dummy_data
+
+from app.auth.models import User
 
 @app.route('/')
 @app.route('/index')
@@ -66,60 +66,33 @@ def dashboard():
                                                          request = request
                                                          )
 
-@app.route('/entrar', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email = form.email.data).first()
-        if user is None or not user.check_password_hash(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc == '':
-            next_page = url_for('index')
-        return redirect(next_page)
-    return render_template('login.html', title="Entrar", form=form)
 
-@app.route('/logout')
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-@app.route('/cadastrar', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(username = form.username.data,
-                    email = form.email.data)
-        user.set_password_hash(password = form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('login'))
-    return render_template('register.html',title="Cadastro", form=form)
-
-    return render_template('register.html', title="Entrar")
-
-@app.route('/recuperar-senha', methods=['GET', 'POST'])
-def forgot_password():
-    return render_template('forgot_password.html', title="Recuperar Senha")
-
-@app.route('/minha_conta')
-@login_required
-def user_account():
-    return render_template('profile.html', title="Minha Conta", current_user=current_user)
 
 @app.route('/catalogo')
-def products():
+def product_list():
     products = Product.query.all()
     
-    return render_template('products.html', title="Catálogo",  products = products,
+    return render_template('product_list.html', title="Catálogo",  products = products,
                                                                 current_user=current_user,
                                                                 request = request)
+
+@app.route("/catalogo/adicionar", methods=["GET", "POST"])
+def product_add():
+    product = Product()
+    success = False
+
+    if request.method == "POST":
+        form = ProductForm(request.form, obj=product)
+        if form.validate():
+            form.populate_obj(product)
+            db.session.add(product)
+            db.session.commit()
+            success = True
+    else:
+        form = ProductForm(obj=product)
+
+    return render_template("product_add.html", form=form, success=success)
+
 
 @app.route('/categorias')
 def categories():

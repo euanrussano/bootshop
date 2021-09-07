@@ -42,7 +42,8 @@ Produtos | Painel | Bootshop
                 </div>
                 <!-- /.card-header -->
                 <div class="m-2 pr-5">
-                    <button type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i>Novo Produto</button>
+                    <a href="{{ url_for('product_add') }}" type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i>Novo Produto</a>
+                    <!-- <button type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i>Novo Produto</button> -->
                 </div>
             </div>
         </div>
@@ -96,9 +97,6 @@ Produtos | Painel | Bootshop
                       <th style="width: 8%" class="text-center">
                         Qtde em estoque
                       </th>
-                      <th style="width: 8%" class="text-center">
-                        Público
-                      </th>
                       <th style="width: 8%">
                         Data de atualização
                       </th>
@@ -120,18 +118,11 @@ Produtos | Painel | Bootshop
                         <img alt="Product image" class="table-avatar" src="{{ product.thumbnail }}">
                       </td>
                       <td>
-                        <a href="link to category"></a>{{ product.category }}
+                        <a href="link to category"></a>{{ product.category.name }}
                      </td>
                      <td class="text-center">
-                        <span class="badge {% if  product.qty < 10 %}badge-danger{% else %}badge-success{% endif %}">{{ product.qty }}</span>
+                        <span class="badge {% if  product.total_stock < 10 %}badge-danger{% else %}badge-success{% endif %}">{{ product.total_stock }}</span>
                      </td> 
-                    <td class="project-state text-center">
-                        {% if  product.is_available %}
-                            <span class="badge badge-success">Sim</span>
-                        {% else %}
-                            <span class="badge badge-danger">Não</span>
-                        {% endif %}
-                    </td>
                      <td>
                         {{ product.updated_at }}
                      </td>
