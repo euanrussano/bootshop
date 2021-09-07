@@ -13,13 +13,13 @@
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         {% if current_user.is_authenticated %}
-        <a href="{{ url_for('user_account') }}" class="nav-link"><i class="fas fa-user"></i>Conta</a>
+        <a href="{{ url_for('auth.user_account') }}" class="nav-link"><i class="fas fa-user"></i>Conta</a>
         {% else %}
-        <a href="{{ url_for('user_account') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i>Entrar</a>
+        <a href="{{ url_for('auth.user_account') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i>Entrar</a>
         {% endif %}
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i>Encerrar sessão</a>
+        <a href="{{ url_for('auth.logout') }}" class="nav-link"><i class="fas fa-sign-out-alt"></i>Encerrar sessão</a>
       </li>
     </ul>
 
