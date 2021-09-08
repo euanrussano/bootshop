@@ -9,7 +9,7 @@
         <a href="#" class="nav-link disabled"><i>Bem vindo, {{ current_user.username }}</i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ url_for('index') }}" class="nav-link"><i class="fas fa-home"></i>Voltar para o site</a>
+        <a href="{{ url_for('shop.index') }}" class="nav-link"><i class="fas fa-home"></i>Voltar para o site</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         {% if current_user.is_authenticated %}

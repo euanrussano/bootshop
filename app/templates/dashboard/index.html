@@ -8,8 +8,8 @@ Painel
 {% block content %}
 <div class="wrapper">
 
-  {% include 'navbar.html' %}
-  {% include 'sidebar.html' %}
+  {% include 'dashboard/navbar.html' %}
+  {% include 'dashboard/sidebar.html' %}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -35,15 +35,15 @@ Painel
       <div class="container-fluid">
         <div class="row">
           <div class="col-lg-6">
-            {% include 'dashboard_client_graph.html' %}
-            {#% include 'dashboard_best_selling.html' %#}
+            {% include 'dashboard/client_chart.html' %}
+            {#% include 'dashboard/best_selling_table.html' %#}
             
 
           </div>
           <!-- /.col-md-6 -->
           <div class="col-lg-6">
-            {#% include 'dashboard_order_graph.html' %#}
-            {#% include 'dashboard_overview.html' %#}
+            {#% include 'dashboard/order_chart.html' %#}
+            {#% include 'dashboard/overview_table.html' %#}
             
           </div>
           <!-- /.col-md-6 -->

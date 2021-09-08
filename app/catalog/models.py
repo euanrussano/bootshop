@@ -6,7 +6,6 @@ from hashlib import md5
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-
 class Category(db.Model):
     # TODO: add subcategory
     id = db.Column(db.Integer, primary_key=True)
@@ -46,7 +45,17 @@ class Product(db.Model):
     def __repr__(self):
         return '<Product {}>'.format(self.name)
 
+class ProductImage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_url = db.Column(db.String(64))
+    image_filename = db.Column(db.String(64))
+    alt_text = db.Column(db.String(64))
+    caption = db.Column(db.String(128))
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
 
+    def __repr__(self):
+        return '<ProductImage {} - {}>'.format(self.url, self.caption)
+        
 class ProductReview(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(2000))
@@ -84,7 +93,6 @@ class ProductStock(db.Model):
 
         return total_stock
 
-
 products_wishlist = db.Table('products_wishlist',
     db.Column('wishlist_id', db.Integer, db.ForeignKey('wishlist.id'), primary_key=True),
     db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True)
@@ -96,80 +104,3 @@ class Wishlist(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     products = db.relationship('Product', secondary=products_wishlist, lazy='subquery',
         backref=db.backref('wishlists', lazy=True))
-
-
-class Order(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    paid = db.Column(db.Boolean)
-    # -----------Relational fields-----------
-    order_items = db.relationship('OrderItem', backref='order', lazy=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __repr__(self):
-        return '<Order from user {} with order items {}>'.format(self.user_id, self.order_items)
-
-
-class OrderItem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    price = db.Column(db.Numeric(scale=2))
-    quantity = db.Column(db.Integer, default = 0)
-    # -----------Relational fields-----------
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
-    productstock_id = db.Column(db.Integer, db.ForeignKey('product_stock.id'))
-
-    def __repr__(self):
-        return '<OrderItem of product {} in order {}>'.format(self.product_id, self.order_id)
-
-
-class ProductImage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    image_url = db.Column(db.String(64))
-    image_filename = db.Column(db.String(64))
-    alt_text = db.Column(db.String(64))
-    caption = db.Column(db.String(128))
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
-
-    def __repr__(self):
-        return '<ProductImage {} - {}>'.format(self.url, self.caption)
-
-class Offer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    expire_at = db.Column(db.DateTime, nullable=True)
-    offer_type = db.Column(db.String(64))
-    number_vouchers = db.Column(db.Integer)
-    motivation = db.Column(db.String(64))
-    condition = db.Column(db.String(64))
-    available = db.Column(db.Boolean)
-    usage = db.Column(db.Integer)
-    cost = db.Column(db.Numeric(scale=2))
-
-products_coupon = db.Table('products_coupon',
-    db.Column('discount_coupon_id', db.Integer, db.ForeignKey('discount_coupon.id'), primary_key=True),
-    db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True)
-)
-
-class DiscountCoupon(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-    code = db.Column(db.String(64))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    expire_at = db.Column(db.DateTime, nullable=True)
-    
-    # STSC - Can be used one Single Time for one Single Client
-    # MTMC - Can be used Multiple Times for Multiple Clients
-    # STMC - Can be used one Single Time for Multiple Clients
-    usage = db.Column(db.String(2)) 
-    # -----------Relational fields-----------
-    products = db.relationship('Product', secondary=products_coupon, lazy='subquery',
-        backref=db.backref('discount_coupons', lazy=True))
-
-
-
-
-
-
-
-
-

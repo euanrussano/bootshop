@@ -31,12 +31,13 @@
       </div>
 
       <!-- Sidebar Menu -->
+      {% if current_user.is_staff %}
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{ url_for('dashboard') }}" class="nav-link {% if 'dashboard' in request.endpoint %}active{% endif %}">
+            <a href="{{ url_for('dashboard.index') }}" class="nav-link {% if 'dashboard' in request.endpoint %}active{% endif %}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Painel
@@ -45,20 +46,21 @@
           </li>
           <li class="nav-item menu-closed">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-sitemap"></i>Catálogo
+              <i class="nav-icon fas fa-sitemap"></i>
               <p>
+                Catálogo
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ url_for('product_list') }}" class="nav-link {% if 'products' in request.endpoint %}active{% endif %}">
+                <a href="{{ url_for('dashboard.product_list') }}" class="nav-link {% if 'products' in request.endpoint %}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Produtos</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ url_for('categories') }}" class="nav-link {% if 'categories' in request.endpoint %}active{% endif %}">
+                <a href="{{ url_for('dashboard.categories') }}" class="nav-link {% if 'categories' in request.endpoint %}active{% endif %}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Categorias</p>
                 </a>
@@ -203,6 +205,7 @@
           </li>
         </ul>
       </nav>
+      {% endif %}
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

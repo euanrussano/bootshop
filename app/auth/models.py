@@ -39,15 +39,3 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-class Address(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    address = db.Column(db.String(120), nullable=False)
-    postal_code = db.Column(db.Integer, nullable=False)
-    city = db.Column(db.String(120), nullable=False)
-    state = db.Column(db.String(2), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
-    # -----------Relational fields-----------
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
-        nullable=False)

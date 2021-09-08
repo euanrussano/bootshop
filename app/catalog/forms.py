@@ -1,13 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms.fields.simple import TextAreaField
 
-from app.models import Product, Category
-
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.fields.html5  import EmailField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 
 from wtforms_sqlalchemy.fields import QuerySelectField
+
+from app.catalog.models import Category
 
 
 def enabled_categories():
@@ -19,4 +19,6 @@ class ProductForm(FlaskForm):
     category = QuerySelectField(query_factory=enabled_categories, get_label="name", allow_blank=False)
     submit = SubmitField('Criar Produto')
 
-
+class CategoryForm(FlaskForm):
+    name = StringField('Nome', validators = [DataRequired(),])
+    submit = SubmitField('Criar Categoria')
