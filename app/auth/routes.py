@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from flask.helpers import flash
 from flask_migrate import current
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user
 
 from app import app, db
 
@@ -52,8 +52,3 @@ def register():
 @bp.route('/recuperar-senha', methods=['GET', 'POST'])
 def forgot_password():
     return render_template('auth/forgot_password.html', title="Recuperar Senha")
-
-@bp.route('/minha_conta')
-@login_required
-def user_account():
-    return render_template('auth/profile.html', title="Minha Conta", current_user=current_user)

@@ -9,6 +9,7 @@ from app import db
 
 from app.auth.models import User
 from app.catalog.forms import ProductForm
+from app.catalog.models import Product
 from app.logistics.forms import AddressForm
 from app.logistics.models import Address
 

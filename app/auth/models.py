@@ -22,9 +22,6 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-    def username_from_email(self):
-        self.username = self.email.split('@')[0]
-
     @property
     def avatar(self):
         size_avatar = 128

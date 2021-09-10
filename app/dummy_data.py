@@ -20,7 +20,7 @@ for email in emails:
     if email == "john@example.com":
         u.is_staff = True
 
-    u.username_from_email()
+    u.username = u.email.split('@')[0]
     u.set_password_hash("testing")
     
     db.session.add(u)
@@ -28,7 +28,7 @@ for email in emails:
 db.session.commit()
 
 # ------------------- Address ---------------------------
-from app.auth.models import Address
+from app.logistics.models import Address
 
 addresses = [
     Address(
@@ -61,7 +61,7 @@ for address in addresses:
 db.session.commit()
 
 # ------------------- Category ---------------------------
-from app.models import Category
+from app.catalog.models import Category
 category_names = ['Categoria A', 'Categoria B', 'Categoria C']
 
 Category.query.delete()
@@ -73,7 +73,7 @@ for category_name in category_names:
 db.session.commit()
 
 # ------------------- Products ---------------------------
-from app.models import Product
+from app.catalog.models import Product
 
 products =[
     Product(
@@ -103,7 +103,7 @@ def get_products_perc_month():
     return 11
 
 # ------------------- Review ---------------------------
-from app.models import ProductReview
+from app.catalog.models import ProductReview
 
 product_reviews = [
     ProductReview(
@@ -139,18 +139,22 @@ for review in product_reviews:
 db.session.commit()
 
 # ------------------- Product Stock ---------------------------
-from app.models import ProductStock
+from app.catalog.models import ProductStock
 
 product_stocks = [
     ProductStock(
     product_id = Product.query.get(1).id,
     quantity = 10,
-    quantity_sold = 0),
+    quantity_sold = 0,
+    price = 1.99,
+    price_acquired=0.99),
 
     ProductStock(
     product_id = Product.query.get(1).id,
     quantity = 13,
-    quantity_sold = 3)
+    quantity_sold = 3,
+    price = 12.99,
+    price_acquired=11.99)
 ]
 
 ProductStock.query.delete()
@@ -161,7 +165,7 @@ db.session.commit()
 
 # ------------------- Wishlist ---------------------------
 
-from app.models import Wishlist, products_wishlist
+from app.catalog.models import Wishlist, products_wishlist
 
 wishlists = [
     Wishlist(
@@ -181,7 +185,7 @@ db.session.commit()
 
 # ------------------- Orders ---------------------------
 
-from app.models import OrderItem, Order
+from app.logistics.models import OrderItem, Order
 
 orders = [
     Order(

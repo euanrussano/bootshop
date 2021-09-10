@@ -12,6 +12,7 @@ flask-migrate = "*"
 flask-login = "*"
 email-validator = "*"
 wtforms-sqlalchemy = "*"
+python-slugify = "*"
 
 [dev-packages]
 
