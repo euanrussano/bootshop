@@ -23,6 +23,10 @@ class ShoppingCartItem(db.Model):
         product_stock = ProductStock.query.get(self.product_stock_id)
         product = Product.query.get(product_stock.product_id)
         return product
+    
+    @property
+    def total_price(self):
+        return self.quantity * self.price
 
 class ShoppingCart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,7 +36,7 @@ class ShoppingCart(db.Model):
 
     @property
     def total_price(self):
-        return sum(item.price*item.quantity for item in self.items)
+        return sum(item.total_price for item in self.items)
 
     @property
     def __len__(self):

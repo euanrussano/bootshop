@@ -9,7 +9,7 @@ from app import db
 
 from app.auth.models import User
 from app.catalog.forms import ProductForm
-from app.catalog.models import Product
+from app.catalog.models import Category, Product
 from app.logistics.forms import AddressForm
 from app.logistics.models import Address
 
@@ -21,9 +21,9 @@ def index():
 
     #current_user = dummy_data.current_user
     
-    messages = dummy_data.Message
+    #messages = dummy_data.Message
 
-    notifications = dummy_data.Notification
+    #notifications = dummy_data.Notification
     
     today = datetime.today()
     first_day_curr_month = datetime(today.year, today.month, 1)
@@ -57,8 +57,8 @@ def index():
 
     
     return render_template('dashboard/index.html', title='Painel', current_user=current_user,
-                                                         messages=messages,
-                                                         notifications=notifications,
+                                                         #messages=messages,
+                                                         #notifications=notifications,
                                                          client_stats = client_stats,
                                                          #order_stats = order_stats,
                                                          #best_selling_products = best_selling_products,
