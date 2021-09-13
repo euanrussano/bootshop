@@ -72,7 +72,7 @@ class ProductImage(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
 
     def __repr__(self):
-        return '<ProductImage {} - {}>'.format(self.url, self.caption)
+        return '<ProductImage {} - {}>'.format(self.image_url, self.caption)
         
 class ProductReview(db.Model):
     id = db.Column(db.Integer, primary_key=True)

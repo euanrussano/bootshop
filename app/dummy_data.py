@@ -89,7 +89,12 @@ products =[
     Product(
     name = 'Produto 3',
     description = 'Even another simple product ',
-    category_id = 2)
+    category_id = 2),
+
+    Product(
+    name = 'Produto 4',
+    description = 'Yet some another product ',
+    category_id = 3)
 ]
 
 Product.query.delete()

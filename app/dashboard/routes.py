@@ -1,15 +1,18 @@
+from flask import render_template, request, redirect, url_for, flash, send_from_directory
+from flask_login import current_user, login_required
 
-from flask import render_template, request, redirect, url_for, flash
-from flask_login import current_user
-
+import os
 from werkzeug.urls import url_parse
+from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
-from app import db
+from app import db, app
+from app.utils import allowed_image
 
 from app.auth.models import User
+from app.auth.permissions import staff_only
 from app.catalog.forms import ProductForm
-from app.catalog.models import Category, Product
+from app.catalog.models import Category, Product, ProductImage
 from app.logistics.forms import AddressForm
 from app.logistics.models import Address
 
@@ -17,6 +20,8 @@ from app.dashboard import bp
 
 
 @bp.route('/')
+@login_required
+@staff_only
 def index():
 
     #current_user = dummy_data.current_user
@@ -69,16 +74,23 @@ def index():
 
 
 @bp.route('/produtos')
+@login_required
+@staff_only
 def product_list():
     products = Product.query.all()
+    if 'message' in request.args:
+        message = request.args['message']  # counterpart for url_for()
     
     return render_template('dashboard/product_list.html', title="Catálogo",  products = products,
                                                                 current_user=current_user,
-                                                                request = request)
+                                                                request = request,
+                                                                message = message)
 
-@bp.route("/produtos/adicionar", methods=["GET", "POST"])
-def product_add():
-    product = Product()
+@bp.route("/produtos/editar/<product_slug>", methods=["GET", "POST"])
+@staff_only
+@login_required
+def product_edit(product_slug):
+    product = Product.query.filter_by(slug=product_slug)
     success = False
 
     if request.method == "POST":
@@ -93,8 +105,49 @@ def product_add():
 
     return render_template("dashboard/product_add.html", form=form, success=success)
 
+@bp.route("/produtos/adicionar", methods=["GET", "POST"])
+@staff_only
+@login_required
+def product_add():
+    success = False
+
+    if request.method == "POST":
+        form = ProductForm(request.form)
+        if form.validate():
+            product = Product(name=form.name.data, description=form.description.data, category_id=form.category.data.id)
+            message = ''
+
+            uploaded_files = request.files.getlist("files[]")
+            #uploaded_file = request.files("file")
+            for uploaded_file in uploaded_files:
+                print('FILENAME = ', uploaded_file.filename)
+                if uploaded_file and allowed_image(uploaded_file.filename):
+                    filename = secure_filename(uploaded_file.filename)
+                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    uploaded_file.save(image_path)
+                    product_image = ProductImage(image_url = image_path, image_filename=image_path, product_id = product.id)
+                    db.session.add(product_image)
+                    message += f'Imagem {image_path} criado com sucesso.\n' 
+                    
+            db.session.add(product)
+            db.session.commit()
+            message += 'Produto criado com successo.'
+            return redirect(url_for('dashboard.product_list', message = message))
+    else:
+        form = ProductForm()
+
+    return render_template("dashboard/product_add.html", form=form, success=success)
+
+
+
+@bp.route('/uploads/<filename>')
+def upload(filename):
+    return send_from_directory(app.config['UPLOAD_PATH'], filename)
+
 
 @bp.route('/categorias')
+@login_required
+@staff_only
 def categories():
     categories = Category.query.all()
     
@@ -104,6 +157,8 @@ def categories():
 
 
 @bp.route('/enderecos')
+@login_required
+@staff_only
 def address_list():
     if not current_user.is_authenticated:
         return redirect(url_for('index'))
@@ -111,6 +166,8 @@ def address_list():
     return render_template('auth/address_list.html',title="Endereços", addresses=addresses)
 
 @bp.route('/enderecos/<address_id>', methods=['GET', 'POST'])
+@login_required
+@staff_only
 def address_detail(address_id):
     address = Address.query.get(address_id)
     if not current_user.is_authenticated or not address.user_id == current_user.id:
@@ -124,6 +181,8 @@ def address_detail(address_id):
     return render_template('address_add.html', title='Editar Endereço',form=form)
 
 @bp.route('/enderecos/novo', methods=['GET', 'POST'])
+@login_required
+@staff_only
 def address_add():
     if not current_user.is_authenticated:
         return redirect(url_for('index'))

@@ -14,8 +14,18 @@
   {% endblock %}
 </head>
 <body class="hold-transition {{ body_class }}">
-    {% block content %}
-    {% endblock %}
+  
+  <div class="{% if body_class!='login-page' and body_class!='register-page' %}wrapper{% endif %}">
+  {% block content %}
+  {% endblock %}
+  
+  
+
+  </div>  
+
+  {% if body_class!="login-page" and body_class!="register-page" %}
+    {% include 'footer.html' %}
+  {% endif %}
 
     {% block scripts %}
     <!-- REQUIRED SCRIPTS -->

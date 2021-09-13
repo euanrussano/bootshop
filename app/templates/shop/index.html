@@ -6,7 +6,6 @@ Produtos | Painel | Bootshop
 {% endblock %}
 
 {% block content %}
-<div class="wrapper">
 
   {% include 'shop/navbar.html' %}
   <!-- Content Wrapper. Contains page content -->
@@ -45,8 +44,12 @@ Produtos | Painel | Bootshop
                     </div>
                   </div>    
             </div>
+            
+          <div class="col-lg-9">
+            <div class="row">
             {% for product in products %}
-          <div class="col-lg-3">    
+            
+            <div class="col-lg-3">
             <div class="card">
               <div class="card-body">
                 <a href="{{ url_for('shop.product_detail', product_slug=product.slug) }}"><img src="{{ product.thumbnail }}" alt=""></a>
@@ -58,16 +61,17 @@ Produtos | Painel | Bootshop
                 <a href="#" class="card-link">Adicionar à cesta</a>
               </div>
             </div>
+          </div>
             
             
           <!-- /.col-md-6 -->
+          {% endfor  %}
         </div>
-        {% endfor  %}
+        </div>
+        
         <!-- /.row -->
       </div>
       <!-- /.container-fluid -->
     </div>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
   {% endblock %}

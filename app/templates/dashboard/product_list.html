@@ -6,7 +6,6 @@ Produtos | Painel | Bootshop
 {% endblock %}
 
 {% block content %}
-<div class="wrapper">
 
   {% include 'dashboard/navbar.html' %}
   {% include 'dashboard/sidebar.html' %}
@@ -44,6 +43,20 @@ Produtos | Painel | Bootshop
                 <div class="m-2 pr-5">
                     <a href="{{ url_for('dashboard.product_add') }}" type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i>Novo Produto</a>
                     <!-- <button type="button" class="btn btn-primary"><i class="fas fa-plus-circle"></i>Novo Produto</button> -->
+                    
+                    {% if 'alerta' in message %}
+                    <div class="alert alert-warning alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                      <h5><i class="icon fas fa-check"></i>Atenção!</h5>
+                      {{ message }}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                      <h5><i class="icon fas fa-check"></i>Sucesso!</h5>
+                      {{ message }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
